@@ -1,5 +1,2 @@
 flask
-flask-socketio
-eventlet
-opencv-python
-flask-cors
+opencv-python-headless

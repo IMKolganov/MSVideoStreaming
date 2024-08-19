@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5003
 
 # Run the application
-CMD ["python", "app.py"]
+CMD ["python", "run.py"]
