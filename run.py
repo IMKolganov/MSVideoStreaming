@@ -1,12 +1,7 @@
-from flask import Flask, Response, send_from_directory
-from flask_socketio import SocketIO, emit
+from flask import Flask, Response
 import cv2
-import os
-from flask_cors import CORS
 
-app = Flask(__name__, static_folder='public')
-CORS(app)
-socketio = SocketIO(app)
+app = Flask(__name__)
 
 def generate_frames():
     cap = cv2.VideoCapture(0)
@@ -25,17 +20,5 @@ def video_feed():
     return Response(generate_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/')
-def index():
-    return send_from_directory(app.static_folder, 'index.html')
-
-@socketio.on('connect')
-def handle_connect():
-    print("Client connected")
-
-@socketio.on('disconnect')
-def handle_disconnect():
-    print("Client disconnected")
-
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5003)
+    app.run(host='0.0.0.0', port=5003)
