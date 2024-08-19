@@ -1,11 +1,11 @@
-# run.py
-
 from flask import Flask, Response, send_from_directory
 from flask_socketio import SocketIO, emit
 import cv2
 import os
+from flask_cors import CORS
 
 app = Flask(__name__, static_folder='public')
+CORS(app)
 socketio = SocketIO(app)
 
 def generate_frames():
@@ -15,13 +15,10 @@ def generate_frames():
         if not success:
             break
         else:
-            # Кодирование фрейма в JPEG
             _, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
-            
-            # Отправка фрейма через WebSocket
             yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 @app.route('/video_feed')
 def video_feed():
